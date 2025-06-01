@@ -47,11 +47,13 @@ def requirements(ctx) -> None:
 
 
 @task
-def docker_build(ctx, progress: str = "plain") -> None:
+def docker_build(ctx, tag="train:latest", progress: str = "plain") -> None:
     """Build docker images."""
     ctx.run(
-        f"docker build -t train:latest . -f dockerfiles/train.dockerfile --progress={progress}",
+        f"docker build -t {tag} . -f dockerfiles/train.dockerfile --progress={progress}",
         echo=True,
         pty=not WINDOWS
     )
+
+
 
