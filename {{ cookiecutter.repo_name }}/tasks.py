@@ -26,14 +26,20 @@ def create_environment(ctx):
     )
 
 @task
-def requirements(ctx: Context) -> None:
+def requirements(ctx) -> None:
     """Install project requirements. You must install PyTorch manually depending on your system."""
     print(
         "\nPyTorch is not installed automatically.\n"
         "Please visit: https://pytorch.org/get-started/locally/ to choose the correct version.\n"
-        "Then run the appropriate install command, e.g.:\n\n"
-        "    pip install torch==2.6.0 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126\n"
+        "Then paste the install command below (or press Enter to skip):\n"
     )
+
+    user_cmd = input(">>> ")
+    if user_cmd.strip():
+        ctx.run(user_cmd, echo=True, pty=not WINDOWS)
+    else:
+        print("Skipping PyTorch install. Be sure to install it manually before using GPU features.")
+
 
     # ctx.run("python -m pip install -U pip setuptools wheel", echo=True, pty=not WINDOWS)
     ctx.run("python -m pip install -e .", echo=True, pty=not WINDOWS)
@@ -41,15 +47,10 @@ def requirements(ctx: Context) -> None:
 
 
 @task
-def docker_build(ctx: Context, progress: str = "plain") -> None:
+def docker_build(ctx, progress: str = "plain") -> None:
     """Build docker images."""
     ctx.run(
         f"docker build -t train:latest . -f dockerfiles/train.dockerfile --progress={progress}",
-        echo=True,
-        pty=not WINDOWS
-    )
-    ctx.run(
-        f"docker build -t api:latest . -f dockerfiles/api.dockerfile --progress={progress}",
         echo=True,
         pty=not WINDOWS
     )
