@@ -1,0 +1,25 @@
+name: docker images compilation
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install Invoke  # To run the docker build from tasks, i need python in the github compiler
+      run: |
+        pip install invoke
+
+    - name: Build Docker images (via tasks.py)
+      run: invoke docker-build --progress=plain
