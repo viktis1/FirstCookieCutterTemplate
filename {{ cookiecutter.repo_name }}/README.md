@@ -2,6 +2,13 @@
 
 {{cookiecutter.description}}
 
+Install the necessary packages and load the project functions with the function
+'pip install -e .' 
+Torch is not part of this package, as it depends on the CUDA version of the GPU you want to run it on. To find out which cuda version you are using, use the below code
+
+Then download the correct torch version for your GPU (below for windows cuda 12.6, find the correct one https://pytorch.org/get-started/locally/)
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu126
+
 ## Project structure
 
 The directory structure of the project looks like this:
